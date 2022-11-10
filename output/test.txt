@@ -1,0 +1,1 @@
+let fun pow2 (n) = let val sum = 1 in {while 0<n do {sum := sum*2; n := n-1}; sum} end in pow2(10) end; 

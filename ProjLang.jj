@@ -1,0 +1,175 @@
+/* JavaCC file for csc8310 project language */
+// Do not modify the options below.
+options {
+    LOOKAHEAD = 2;
+    STATIC = false;
+    OUTPUT_DIRECTORY = "output";
+    FORCE_LA_CHECK = true;
+}
+
+// Do not change the name of parser/class below.
+PARSER_BEGIN(ProjLangParser)
+
+public class ProjLangParser {
+      // Do not add anything here.
+      // Generated parser code gets inserted here.
+}
+
+PARSER_END(ProjLangParser)
+
+// Add your lexer rules here.
+
+SKIP: 
+{
+	" "
+	| "\t"
+	| "\n"
+	| "\r"
+}
+
+TOKEN:{
+	<IF: "if">
+}
+
+TOKEN:
+{
+	<THEN: "then">
+}
+
+TOKEN: 
+{
+	<ELSE: "else">
+}
+
+TOKEN: 
+{
+	<WHILE: "while">
+}
+
+TOKEN: 
+{
+	<DO: "do">
+}
+
+TOKEN: 
+{
+	<LET: "let">
+}
+
+TOKEN: 
+{
+	<FUN: "fun">
+}
+
+TOKEN: 
+{
+	<VAL: "val">
+}
+
+TOKEN: 
+{
+	<IN: "in">
+}
+
+TOKEN:
+{
+	<END: "end">
+}
+//do I separate these tokens or is this good also is the location good 
+TOKEN: {
+	<TRUE: "true"> 
+	|<FALSE: "false">
+}
+
+TOKEN: 
+{
+	< ID: ["a"-"z", "A"-"Z"] (["a"-"z", "A"-"Z", "0"-"9"])* > 
+}
+
+TOKEN :
+{
+	< NUM: ( ["0"-"9"] )+ >
+}
+
+TOKEN:
+{
+	< ASSIGN: ":=" >
+}
+//binaryops
+//Mulop
+TOKEN: 
+{
+	  < MUL: "*">
+	| < DIV: "/">
+	| < AND: "&" >
+
+}
+//Addop
+TOKEN:
+{
+	  < ADD: "+">
+	| < SUB: "-">
+	| < OR: "|" >
+}
+//Relop
+TOKEN: 
+{
+	  < EQUAL: "=">
+	| <LESS: "<" >
+}
+
+TOKEN: 
+{
+	< NEG : "!" >
+}
+
+TOKEN:
+{
+	< SEMI: ";" >
+}
+
+TOKEN:
+{
+	  < LBRACKET: "{" >
+	| < RBRACKET: "}" >
+}
+
+TOKEN: 
+{
+	  <LPAR: "(" > 
+	| <RPAR: ")" >
+}
+
+// Complete the rule for input() below
+// and add rest of the parser rules
+// following it.
+
+void input(): {} {expr() <SEMI> <EOF>}// complete the rule and do not change the return type
+
+// Add rest of the parser rules here
+
+void expr(): {} {if_exp() | letval_exp() | letfun_exp() | while_exp() | seq_exp() | assn_exp() | not_exp() | rel_exp()}
+
+void if_exp(): {} {<IF> expr() <THEN> expr() <ELSE> expr()}
+
+void letval_exp(): {} {<LET> <VAL> <ID> <EQUAL> expr() <IN> expr() <END>} 
+
+void letfun_exp(): {} {<LET> <FUN> <ID> <LPAR> <ID> <RPAR> <EQUAL> expr() <IN> expr() <END>} 
+
+void while_exp(): {} {<WHILE> expr() <DO> expr()}
+
+void seq_exp(): {} {<LBRACKET> expr() (<SEMI> expr())* <RBRACKET>}
+
+void not_exp(): {} {<NEG> expr()}
+
+void assn_exp(): {} {<ID> <ASSIGN> expr()} 
+
+void rel_exp(): {} {arith_exp() ((<EQUAL> | <LESS>) arith_exp())?} 
+
+void arith_exp(): {} {term() ((<ADD> | <SUB> | <OR>) term())*} 
+
+void term(): {} {factor() ((<MUL> | <DIV> | <AND>) factor())*}
+
+void factor(): {} {<NUM> | <TRUE> | <FALSE> | <ID> <LPAR> expr() <RPAR> | <ID> | <LPAR> expr() <RPAR>} 
+
+
